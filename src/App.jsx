@@ -1,4 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import Auth from './Auth';
+import { supabase } from './lib/supabase';
 import { BookOpen, GraduationCap, ClipboardCheck, ChevronRight, ArrowLeft, CheckCircle2, XCircle, RotateCcw, Menu, Sparkles } from 'lucide-react';
 
 const chapters = [
@@ -135,7 +137,13 @@ function App() {
   };
   const openChapter = id => { setActiveId(id); setPage('lesson'); window.scrollTo(0,0); };
   const resetQuiz = () => { setAnswers({}); setSubmitted(false); };
+  if (!authReady) {
+    return <div>Memeriksa sesi akun...</div>;
+  }
 
+  if (!session) {
+    return <Auth onLogin={() => {}} />;
+  }
   return <div className="app-shell">
     <header className="topbar">
       <button className="brand" onClick={() => setPage('home')} aria-label="Kembali ke beranda"><span className="brand-mark"><Sparkles size={20}/></span><span><strong>Balaghah Builder</strong><small>RUANG BELAJAR ILMU MA’ANI</small></span></button>
